@@ -1,0 +1,42 @@
+=== [ linux:topic ][ jar ] ===
+[ --- start ---- ]
+[ jar ][ list classes ]
+jar tf jar-file
+[ ---  end  ---- ]
+
+=== [ java:topic ][ general ] ===
+[ --- start ---- ]
+[ ---  end  ---- ]
+
+=== [ java:topic ][ type ] ===
+[ --- start ---- ]
+Boolean (value is true or false)
+null is null
+[ ---  end  ---- ]
+
+=== [ java:topic ][ random ] ===
+[ --- start ---- ]
+int random_max = 8;
+/// return 0(inclusive)-random_max(exclusive)
+/// in this example, will return 0-7
+int randomIndex = random.nextInt(random_max); // random index
+[ ---  end  ---- ]
+
+=== [ java:topic ][ Collection ] ===
+[ --- start ---- ]
+String[] alpha = { "A", "E", "I", "O", "U" };
+List list = new ArrayList(alpha);
+Collections.shuffle(list);
+System.out.println("list");
+[ ---  end  ---- ]
+
+=== [ java:topic ][ example random ] ===
+[ --- start ---- ]
+Collections.shuffle(fileNameList); // shuffle file names
+
+// put the correct answer at the end of fileNameList
+/// so fill in everything then replace one of it with answer
+int correct = fileNameList.indexOf(correctAnswer);
+fileNameList.add(fileNameList.remove(correct));
+
+[ ---  end  ---- ]

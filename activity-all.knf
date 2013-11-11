@@ -1,0 +1,110 @@
+=== [ java:topic ][ destroy current and create new activity ] ===
+[ --- start ---- ]
+/// AndroidManifest.xml - must declare the new activity here as well
+        <activity
+            android:name="happygrass.app.guess.LoginActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="MainActivity"></activity>
+
+/// start an activity after delay
+public void submitOnClick(View view) {
+	RadioGroup rg = (RadioGroup) findViewById(R.id.radio_question);
+	TextView tv = (TextView) findViewById(R.id.txt_answer);
+	int index = rg.getCheckedRadioButtonId();
+
+	switch(index) {
+		case R.id.radbtn_1:
+			tv.setText(getString(R.string.firstloginWrong1));
+			break;
+		case R.id.radbtn_2:
+			tv.setText(getString(R.string.firstloginWrong2));
+			break;
+		case R.id.radbtn_3:
+			tv.setText(getString(R.string.firstloginCorrect));
+			mHandler.postDelayed(finishThisActivit,900);
+			break;
+		default:	
+			tv.setText("error");
+	}
+}
+
+private Runnable finishThisActivit = new Runnable() {
+	public void run() {
+		Intent i = new Intent(getApplicationContext(), GalleryActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		startActivity(i);
+		finish();
+	}
+};
+/// or if put in AndroidManifest.xml, then no need to call finish()
+<activity android:name=".ClassName" android:noHistory="true" ... />
+
+[ ---  end  ---- ]
+
+=== [ java:topic ][ full screen ] ===
+[ --- start ---- ]
+requestWindowFeature(Window.FEATURE_NO_TITLE);
+getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+						WindowManager.LayoutParams.FLAG_FULLSCREEN);
+[ ---  end  ---- ]
+
+=== [ java:topic ][ screen always on ] ===
+[ --- start ---- ]
+getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+/// Another way is to use a wake lock:
+mWakeLock = getContext().getSystemService(Context.POWER_SERVICE)
+    .newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getClass().getName());
+/// --- manifest
+<uses-permission android:name="android.permission.WAKE_LOCK"/>
+[ ---  end  ---- ]
+
+
+=== [ java:topic ][ new activity ] ===
+[ --- start ---- ]
+Intent intent = new Intent();
+intent.setClassName("com.android.bla", "com.android.bla.YourActivity");
+startActivity(intent);
+/// or---
+import happygrass.app.imported.musicg.demo.android.WhistleActivity;
+Intent i = new Intent(getApplicationContext(), WhistleActivity.class);
+[ ---  end  ---- ]
+
+=== [ java:topic ][ Bundle ] ===
+[ --- start ---- ]
+getDouble();
+getInt();
+/// topic: onCreate
+public void onCreate(Bundle savedInstanceState) {
+      if ( savedInstanceState == null ) // the app just started running
+      { }
+      else // app is being restored from memory, not executed from scratch
+      {
+		  /// e.g. rotated
+         currentBillTotal = savedInstanceState.getDouble("BILL_TOTAL");
+	  }
+}
+/// topic: onSaveInstanceState
+protected void onSaveInstanceState(Bundle outstate) {
+	super.onSaveInstanceState(outstate);
+	outstate.putDouble("BILL_TOTAL", 50.0);
+}
+[ ---  end  ---- ]
+
+=== [ topic ][ activity summary ] ===
+[ --- start ---- ]
+                            +--------------+
+							|              |
+						    v              |
+onCreate -> onStart() -> onResume() -> onPause() -> onStop() -> onDestroy()
+             +---------> onStop()	                   +------> onRestart() -> onStart()
+
+onStop() and onDestroy() can be killable
+- system at any time without another line of its code being executed. 
+  use the onPause() method to write any persistent data
+[ ---  end  ---- ]

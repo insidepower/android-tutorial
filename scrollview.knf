@@ -1,0 +1,163 @@
+=== [ xml:topic ][ dynamic ] ===
+[ --- start ---- ]
+<ScrollView android:id="@+id/queryScrollView" 
+ android:layout_width="match_parent" 
+ android:layout_span="2" android:padding="5dp">
+	<TableLayout android:id="@+id/queryTableLayout" 
+	   android:layout_width="match_parent" 
+	   android:layout_height="match_parent" android:padding="5dp" 
+	   android:stretchColumns="*"></TableLayout>
+</ScrollView>
+
+/// dynamic table row, stored @ res/layout/new_tag_view.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+   android:id="@+id/newTagTableRow" 
+   android:layout_width="match_parent" 
+   android:layout_height="wrap_content" 
+   android:background="@android:color/transparent">
+   
+   <Button android:id="@+id/newTagButton" 
+      android:layout_width="@dimen/tagButtonWidth" 
+      android:layout_height="wrap_content"></Button>
+   <Button android:id="@+id/newEditButton" 
+      android:layout_width="@dimen/editButtonWidth" 
+      android:layout_height="wrap_content" 
+      android:text="@string/edit"></Button>
+</TableRow>
+
+/// calling
+String newTag = "new-key";
+String[] tags = 
+         savedSearches.getAll().keySet().toArray(new String[0]); 
+Arrays.sort(tags, String.CASE_INSENSITIVE_ORDER);
+makeTagGUI(newTag, Arrays.binarySearch(tags, newTag));
+
+
+/// inserting new view.
+private void makeTagGUI(String tag, int index)
+{
+  LayoutInflater inflater = (LayoutInflater) getSystemService(
+	 Context.LAYOUT_INFLATER_SERVICE);
+
+  View newTagView = inflater.inflate(R.layout.new_tag_view, null);
+   
+  Button newTagButton = 
+	 (Button) newTagView.findViewById(R.id.newTagButton);
+  newTagButton.setText(tag); 
+  newTagButton.setOnClickListener(queryButtonListener); 
+
+  Button newEditButton = 
+	 (Button) newTagView.findViewById(R.id.newEditButton); 
+  newEditButton.setOnClickListener(editButtonListener);
+
+  queryTableLayout.addView(newTagView, index);
+}
+
+
+/// queryButtonListener
+public OnClickListener queryButtonListener = new OnClickListener()
+{
+  @Override public void onClick(View v) {
+	 String buttonText = ((Button)v).getText().toString();
+	 String query = savedSearches.getString(buttonText, "");
+	 
+	 String urlString = "http://search.twitter.com/search?q="+query;
+
+	 Intent webIntent = new Intent(Intent.ACTION_VIEW, 
+		Uri.parse(urlString));                      
+
+	 startActivity(webIntent); // execute the Intent
+  } }
+
+/// clear all view
+private void clearButtons() {
+	queryTableLayout.removeAllViews(); }
+
+/// provide more complete info
+public class FavoriteTwitterSearches extends Activity 
+{
+   private SharedPreferences savedSearches; // user's favorite searches
+   private TableLayout queryTableLayout; // shows the search buttons
+
+   @Override
+   public void onCreate(Bundle savedInstanceState) {
+	   ... 
+      queryTableLayout = 
+         (TableLayout) findViewById(R.id.queryTableLayout);
+
+
+[ ---  end  ---- ]
+
+=== [ java:topic ][ delete view ] ===
+[ --- start ---- ]
+/// xml
+<TableLayout android:id="@+id/buttonTableLayout" 
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content" 
+      android:layout_weight="1" android:stretchColumns="0,1,2">
+      <TableRow android:id="@+id/tableRow0" 
+         android:layout_width="match_parent" 
+         android:layout_height="wrap_content" 
+         android:orientation="horizontal"></TableRow>
+      <TableRow android:id="@+id/tableRow1"
+         android:layout_width="match_parent" 
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"></TableRow>
+      <TableRow android:id="@+id/tableRow2"
+         android:layout_width="match_parent" 
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"></TableRow>
+</TableLayout>
+
+/// usage
+private TableLayout buttonTableLayout; // table of answer Buttons
+buttonTableLayout = 
+	(TableLayout) findViewById(R.id.buttonTableLayout);
+
+/// delete previous button
+<hi> getChildCount</hi>
+for (int row = 0; row < buttonTableLayout.getChildCount(); ++row)
+ ((TableRow) buttonTableLayout.getChildAt(row)).removeAllViews();
+
+
+// get a reference to the LayoutInflater service
+LayoutInflater inflater = (LayoutInflater) getSystemService(
+		Context.LAYOUT_INFLATER_SERVICE);
+
+// add 3, 6, or 9 answer Buttons based on the value of guessRows
+for (int row = 0; row < guessRows; row++) 
+{
+	TableRow currentTableRow = getTableRow(row);
+
+	// place Buttons in currentTableRow
+	for (int column = 0; column < 3; column++) 
+	{
+		// inflate guess_button.xml to create new Button
+		Button newGuessButton = 
+			(Button) inflater.inflate(R.layout.guess_button, null);
+
+		// get country name and set it as newGuessButton's text
+		String fileName = fileNameList.get((row * 3) + column);
+		newGuessButton.setText(getCountryName(fileName));
+
+		// register answerButtonListener to respond to button clicks
+		newGuessButton.setOnClickListener(guessButtonListener);
+		currentTableRow.addView(newGuessButton);
+	} // end for
+
+	// randomly replace one Button with the correct answer
+	int row = random.nextInt(guessRows); // pick random row
+	int column = random.nextInt(3); // pick random column
+	TableRow randomTableRow = getTableRow(row); // get the TableRow
+	String countryName = getCountryName(correctAnswer);
+	((Button)randomTableRow.getChildAt(column)).setText(countryName);
+} // end method loadNextFlag
+
+// returns the specified TableRow
+private TableRow getTableRow(int row)
+{ return (TableRow) buttonTableLayout.getChildAt(row); }
+
+} // end for
+
+[ ---  end  ---- ]

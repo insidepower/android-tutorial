@@ -1,4 +1,17 @@
-[----- RelativeLayout -------------------------------------------------------- ]
+=== [ xml:topic ] [ general ] ===
+[ --- start ---- ]
+@@ 1
+@+id/xxx
+@@ 2
+when store in layout folder, e.g. layout/main.xml
+then invoke using R.layout.main
+@@ 3
+/// to mark this element to be able to occupy more space than others (0-1.0)
+android:layout_weight="1"
+[ ---  end  ---- ]
+
+=== [ xml:topic ][ RelativeLayout ] ===
+[ --- start ---- ]
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -6,8 +19,10 @@
     tools:context=".MainActivity" >
 	<!-- fill in the Button, Text etc -->
 </RelativeLayout>
+[ ---  end  ---- ]
 
-[----- Button ---------------------------------------------------------------- ]
+=== [ xml:topic ][ Button ] ===
+[ --- start ---- ]
 <Button
 	android:id="@+id/button_login"
 	android:layout_width="wrap_content"
@@ -28,8 +43,10 @@
 	android:layout_marginTop="30dp"
 	android:onClick="loginOnClick"
 	android:text="Login" />
+[ ---  end  ---- ]
 
-[----- Text ------------------------------------------------------------------ ]
+=== [ xml:topic ][ Text ] ===
+[ --- start ---- ]
 <TextView
 	android:id="@+id/textView1"
 	android:layout_width="wrap_content"
@@ -37,9 +54,19 @@
 	android:layout_centerHorizontal="true"
 	android:layout_centerVertical="true"
 	android:text="@string/app_name" />
+[ ---  end  ---- ]
 
+=== [ xml:topic ][ EditText ] ===
+[ --- start ---- ]
+topic: properties
+/// tab will switch to it
+Focusable
+Long clickable
+Cursor visible
+[ ---  end  ---- ]
 
-[----- blank view ------------------------------------------------------------ ]
+=== [ xml:topic ][ blank view ] ===
+[ --- start ---- ]
 <View
   android:layout_width="1dp"
   android:layout_height="30dp">
@@ -58,8 +85,10 @@
   android:layout_height="0dip"
   android:layout_weight="1">
 </View>
+[ ---  end  ---- ]
 
-[----- color ----------------------------------------------------------------- ]
+=== [ xml:topic ][ color ] ===
+[ --- start ---- ]
 <!-- create a colors.xml in res/values/colors.xml -->
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
@@ -68,8 +97,21 @@
 </resources>
 <!-- to use it -->
 <LinearLayout android:background="@color/mycolor">
+[ ---  end  ---- ]
 
-[----- shape ----------------------------------------------------------------- ]
+=== [ xml:topic ][ dimension ] ===
+[ --- start ---- ]
+<!-- create a colors.xml in res/values/dimen.xml -->
+<?xml version="1.0" encoding="UTF-8"?> <resources>
+   <dimen name="tagButtonWidth">230dp</dimen> </resources>
+
+<Button android:id="@+id/newTagButton" 
+      android:layout_width="@dimen/tagButtonWidth" ></Button>
+[ ---  end  ---- ]
+
+=== [ xml:topic ][ shape ] ===
+[ --- start ---- ]
+/// saved at  drawable/rounded_edges.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="#FFFFFF"/>
@@ -78,15 +120,32 @@
 </shape>
 
 <LinearLayout
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     android:background="@drawable/rounded_edges">
     <TextView 
-        android:id="@+id/mytext"
-        android:layout_width="200dip"
-        android:layout_height="wrap_content"
         android:text="blah blah blah blah"
         android:padding="6dip"
         android:textColor="#000000" />
 </LinearLayout>
+[ ---  end  ---- ]
+
+=== [ xml:topic ][ image ] ===
+[ --- start ---- ]
+put in res/drawable-nodpi
+[ ---  end  ---- ]
+
+=== [ xml:topic ][ seekbar ] ===
+[ --- start ---- ]
+/// the padding is important so that user can easily navigate to 0 or 100
+<SeekBar android:layout_height="wrap_content" 
+ android:layout_width="match_parent" 
+ android:id="@+id/customSeekBar" android:layout_span="2" 
+ android:progress="18" android:paddingLeft="8dp" 
+ android:paddingRight="8dp" android:paddingBottom="5dp" 
+ android:layout_weight="1"></SeekBar>
+[ ---  end  ---- ]
+
+=== [ xml:topic ][ ImageView ] ===
+[ --- start ---- ]
+/// make the view bound adjust to rescaled image bound
+android:adjustViewBounds="true"
+[ ---  end  ---- ]
